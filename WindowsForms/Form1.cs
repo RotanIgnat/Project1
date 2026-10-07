@@ -13,14 +13,12 @@ namespace WindowsForms
         {
             InitializeComponent();
 
-            // Подписываемся на события
             TableYouTubers.SelectionChanged += TableYouTubers_SelectionChanged;
             btnAdd.Click += btnAdd_Click;
             btnEdit.Click += btnEdit_Click;
             btnDelete.Click += btnDelete_Click;
             btnSort.Click += btnSort_Click;
 
-            // Заполняем таблицу при старте
             LoadData();
         }
 
@@ -35,10 +33,42 @@ namespace WindowsForms
             // Переименовываем колонки на русский
             RenameColumns();
 
-            // Сразу выделяем первую строку, чтобы поля заполнились
+            // Сразу выделяем первую строку
             if (TableYouTubers.Rows.Count > 0)
             {
                 TableYouTubers.Rows[0].Selected = true;
+            }
+
+            // Обновляем список платформ в ComboBox
+            UpdatePlatformList();
+        }
+
+        // Обновляем список платформ в ComboBox
+        private void UpdatePlatformList()
+        {
+            // Запоминаем, что было выбрано раньше
+            string oldChoice = cmbSortPlatform.SelectedItem as string;
+
+            // Очищаем список
+            cmbSortPlatform.Items.Clear();
+
+            // Проходим по всем блогерам и добавляем платформы, которых ещё нет
+            foreach (Blogger b in logic.ReadTable())
+            {
+                if (!cmbSortPlatform.Items.Contains(b.Platform))
+                {
+                    cmbSortPlatform.Items.Add(b.Platform);
+                }
+            }
+
+            // Возвращаем прежний выбор, если он ещё есть в списке
+            if (oldChoice != null && cmbSortPlatform.Items.Contains(oldChoice))
+            {
+                cmbSortPlatform.SelectedItem = oldChoice;
+            }
+            else if (cmbSortPlatform.Items.Count > 0)
+            {
+                cmbSortPlatform.SelectedIndex = 0;
             }
         }
 
@@ -52,7 +82,7 @@ namespace WindowsForms
             SetHeader("Topic", "Тема");
         }
 
-        // Вспомогательный метод: если колонка есть — меняем заголовок
+        // Метод: если колонка есть — меняем заголовок
         private void SetHeader(string columnName, string headerText)
         {
             if (TableYouTubers.Columns[columnName] != null)

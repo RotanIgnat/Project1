@@ -84,7 +84,7 @@ namespace ConsoleApp
 
                 foreach (var b in list)
                 {
-                    // Форматируем вывод: :N0 разделяет тысячи пробелами (например, 10 000 000)
+                    // Форматируем вывод: :N0 разделяет тысячи пробелами
                     Console.WriteLine("{0,-5} | {1,-20} | {2,-15:N0} | {3,-12} | {4,-15}", b.Id, b.Name, b.Subscribers, b.Platform, b.Topic);
                 }
             }
@@ -118,7 +118,7 @@ namespace ConsoleApp
             Console.Write("Введите тематику (Gaming, Tech...): ");
             string topic = Console.ReadLine();
 
-            // Создаем объект через круглые скобки, используя ваш конструктор
+            // Создаем объект
             Blogger newBlogger = new Blogger(id, name, subs, platform, topic);
             _logic.AddBlogger(newBlogger);
 
@@ -179,7 +179,7 @@ namespace ConsoleApp
             WaitForKey();
         }
 
-        // 7. Сортировка по двум уровням (Новый метод)
+        // 7. Сортировка по двум уровням
         private static void SortSubscribersWithPlatformPriority()
         {
             Console.WriteLine("--- Двухуровневая сортировка ---");
