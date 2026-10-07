@@ -1,0 +1,9 @@
+<Solution>
+  <Project Path="ConsoleApp/ConsoleApp.csproj">
+    <BuildDependency Project="ModelBloger/ModelBloger.csproj" />
+  </Project>
+  <Project Path="ModelBloger/ModelBloger.csproj" />
+  <Project Path="WindowsForms/WindowsForms.csproj" Id="2ad389d9-8a6e-4854-a64d-3070f48c2a9a">
+    <BuildDependency Project="ModelBloger/ModelBloger.csproj" />
+  </Project>
+</Solution>
