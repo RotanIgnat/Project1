@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using ModelBloger;
@@ -9,6 +10,9 @@ namespace WindowsForms
     {
         private readonly Logic logic = new Logic();
 
+        /// <summary>
+        /// Конструктор формы: подписка на события и первичная загрузка данных.
+        /// </summary>
         public Form1()
         {
             InitializeComponent();
@@ -18,11 +22,14 @@ namespace WindowsForms
             btnEdit.Click += btnEdit_Click;
             btnDelete.Click += btnDelete_Click;
             btnSort.Click += btnSort_Click;
+            button1.Click += button1_Click;
 
             LoadData();
         }
 
-        // Загружаем список блогеров в таблицу
+        /// <summary>
+        /// Загружает полный список блогеров в таблицу.
+        /// </summary>
         private void LoadData()
         {
             TableYouTubers.DataSource = null;
@@ -30,29 +37,25 @@ namespace WindowsForms
             TableYouTubers.AutoGenerateColumns = true;
             TableYouTubers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            // Переименовываем колонки на русский
             RenameColumns();
 
-            // Сразу выделяем первую строку
             if (TableYouTubers.Rows.Count > 0)
             {
                 TableYouTubers.Rows[0].Selected = true;
             }
 
-            // Обновляем список платформ в ComboBox
             UpdatePlatformList();
         }
 
-        // Обновляем список платформ в ComboBox
+        /// <summary>
+        /// Обновляет список платформ в ComboBox по актуальным данным.
+        /// </summary>
         private void UpdatePlatformList()
         {
-            // Запоминаем, что было выбрано раньше
             string oldChoice = cmbSortPlatform.SelectedItem as string;
 
-            // Очищаем список
             cmbSortPlatform.Items.Clear();
 
-            // Проходим по всем блогерам и добавляем платформы, которых ещё нет
             foreach (Blogger b in logic.ReadTable())
             {
                 if (!cmbSortPlatform.Items.Contains(b.Platform))
@@ -61,7 +64,6 @@ namespace WindowsForms
                 }
             }
 
-            // Возвращаем прежний выбор, если он ещё есть в списке
             if (oldChoice != null && cmbSortPlatform.Items.Contains(oldChoice))
             {
                 cmbSortPlatform.SelectedItem = oldChoice;
@@ -72,7 +74,9 @@ namespace WindowsForms
             }
         }
 
-        // Переименование заголовков колонок
+        /// <summary>
+        /// Переименовывает заголовки колонок таблицы на русские.
+        /// </summary>
         private void RenameColumns()
         {
             SetHeader("Id", "ID");
@@ -82,7 +86,11 @@ namespace WindowsForms
             SetHeader("Topic", "Тема");
         }
 
-        // Метод: если колонка есть — меняем заголовок
+        /// <summary>
+        /// Меняет заголовок указанной колонки, если она существует.
+        /// </summary>
+        /// <param name="columnName">Имя колонки.</param>
+        /// <param name="headerText">Новый заголовок.</param>
         private void SetHeader(string columnName, string headerText)
         {
             if (TableYouTubers.Columns[columnName] != null)
@@ -91,7 +99,9 @@ namespace WindowsForms
             }
         }
 
-        // Чистим поля ввода
+        /// <summary>
+        /// Очищает поля ввода.
+        /// </summary>
         private void ClearFields()
         {
             textName.Clear();
@@ -100,7 +110,14 @@ namespace WindowsForms
             textBoxTopic.Clear();
         }
 
-        // Читаем поля и проверяем их. Если что-то не так — вернём false
+        /// <summary>
+        /// Читает и проверяет поля ввода. Возвращает false при ошибке.
+        /// </summary>
+        /// <param name="name">Имя блогера.</param>
+        /// <param name="subs">Количество подписчиков.</param>
+        /// <param name="platform">Платформа.</param>
+        /// <param name="topic">Тематика.</param>
+        /// <returns>true — если все поля корректны, иначе false.</returns>
         private bool TryReadFields(out string name, out int subs, out string platform, out string topic)
         {
             name = textName.Text.Trim();
@@ -123,7 +140,9 @@ namespace WindowsForms
             return true;
         }
 
-        // Клик по строке — данные летят в поля
+        /// <summary>
+        /// Обработчик смены выделенной строки: переносит данные блогера в поля ввода.
+        /// </summary>
         private void TableYouTubers_SelectionChanged(object sender, EventArgs e)
         {
             if (TableYouTubers.CurrentRow == null)
@@ -143,7 +162,9 @@ namespace WindowsForms
             textBoxTopic.Text = b.Topic;
         }
 
-        // Добавить блогера
+        /// <summary>
+        /// Добавляет нового блогера с автоматически сгенерированным ID.
+        /// </summary>
         private void btnAdd_Click(object sender, EventArgs e)
         {
             string name, platform, topic;
@@ -154,12 +175,13 @@ namespace WindowsForms
                 return;
             }
 
-            // Новый ID — на 1 больше максимального
             int newId = 1;
             if (logic.ReadTable().Count > 0)
             {
                 newId = logic.ReadTable().Max(b => b.Id) + 1;
             }
+
+            platform = NormalizePlatform(platform);
 
             Blogger newBlogger = new Blogger(newId, name, subs, platform, topic);
             logic.AddBlogger(newBlogger);
@@ -168,7 +190,9 @@ namespace WindowsForms
             ClearFields();
         }
 
-        // Изменить выбранного блогера
+        /// <summary>
+        /// Изменяет выбранного в таблице блогера.
+        /// </summary>
         private void btnEdit_Click(object sender, EventArgs e)
         {
             if (TableYouTubers.CurrentRow == null)
@@ -191,11 +215,15 @@ namespace WindowsForms
                 return;
             }
 
+            platform = NormalizePlatform(platform);
+
             logic.Change(name, selected.Id, subs, platform, topic);
             LoadData();
         }
 
-        // Удалить выбранного блогера
+        /// <summary>
+        /// Удаляет выбранного блогера после подтверждения.
+        /// </summary>
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (TableYouTubers.CurrentRow == null)
@@ -210,7 +238,6 @@ namespace WindowsForms
                 return;
             }
 
-            // Спрашиваем подтверждение
             string question = "Удалить блогера \"" + selected.Name + "\"?";
             DialogResult answer = MessageBox.Show(question, "Подтверждение",
                 MessageBoxButtons.YesNo);
@@ -225,7 +252,9 @@ namespace WindowsForms
             ClearFields();
         }
 
-        // Сортировка по галочкам
+        /// <summary>
+        /// Применяет сортировку или фильтрацию в зависимости от состояния галочек.
+        /// </summary>
         private void btnSort_Click(object sender, EventArgs e)
         {
             bool bySubs = chkSortSubs.Checked;
@@ -237,33 +266,93 @@ namespace WindowsForms
                 return;
             }
 
-            // Если нужна платформа — берём её из ComboBox
-            string platform = null;
-            if (byPlatform)
+            if (bySubs && byPlatform)
             {
-                platform = cmbSortPlatform.SelectedItem as string;
-                if (platform == null || platform == "")
+                string platform = cmbSortPlatform.SelectedItem as string;
+                if (string.IsNullOrWhiteSpace(platform))
                 {
                     MessageBox.Show("Выберите платформу из списка.");
                     return;
                 }
-            }
 
-            // Три варианта сортировки
-            if (bySubs && byPlatform)
-            {
                 logic.SortSubscribersWithPlatformPriority(platform);
+                LoadData();
             }
             else if (byPlatform)
             {
-                logic.FilterByPlatform(platform);
+                string platform = cmbSortPlatform.SelectedItem as string;
+                if (string.IsNullOrWhiteSpace(platform))
+                {
+                    MessageBox.Show("Выберите платформу из списка.");
+                    return;
+                }
+
+                List<Blogger> filtered = logic.FilterByPlatform(platform);
+
+                TableYouTubers.DataSource = null;
+                TableYouTubers.DataSource = filtered;
+                TableYouTubers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+                RenameColumns();
+
+                if (TableYouTubers.Rows.Count > 0)
+                {
+                    TableYouTubers.Rows[0].Selected = true;
+                }
             }
             else
             {
                 logic.SortSubscribers();
+                LoadData();
+            }
+        }
+
+        /// <summary>
+        /// Показывает сумму подписчиков для платформы, выбранной в ComboBox.
+        /// </summary>
+        private void button1_Click(object sender, EventArgs e)
+        {
+            string platform = cmbSortPlatform.SelectedItem as string;
+
+            if (platform == null || platform == "")
+            {
+                MessageBox.Show("Выберите платформу из списка.");
+                return;
             }
 
-            LoadData();
+            long total = logic.GetSubscribersByPlatform(platform);
+
+            MessageBox.Show(
+                "Платформа \"" + platform + "\": " + total.ToString("N0") + " подписчиков всего.",
+                "Сумма подписчиков",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
+        }
+
+        /// <summary>
+        /// Возвращает "правильное" написание платформы.
+        /// Если такая платформа уже есть у других блогеров — возвращает её написание.
+        /// Иначе возвращает строку как есть.
+        /// </summary>
+        /// <param name="input">Строка, введённая пользователем.</param>
+        /// <returns>Нормализованное название платформы или исходную строку без пробелов.</returns>
+        private string NormalizePlatform(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                return input;
+            }
+
+            string trimmed = input.Trim();
+
+            foreach (Blogger b in logic.ReadTable())
+            {
+                if (b.Platform.Equals(trimmed, StringComparison.OrdinalIgnoreCase))
+                {
+                    return b.Platform;
+                }
+            }
+
+            return trimmed;
         }
     }
 }

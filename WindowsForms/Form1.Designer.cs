@@ -37,8 +37,9 @@
             tableLayoutPanel5 = new System.Windows.Forms.TableLayoutPanel();
             btnDelete = new System.Windows.Forms.Button();
             btnSort = new System.Windows.Forms.Button();
-            chkSortSubs = new System.Windows.Forms.CheckBox();
+            button1 = new System.Windows.Forms.Button();
             chkPriorityPlatform = new System.Windows.Forms.CheckBox();
+            chkSortSubs = new System.Windows.Forms.CheckBox();
             panelFields = new System.Windows.Forms.Panel();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             labelSortPlatform = new System.Windows.Forms.Label();
@@ -100,8 +101,8 @@
             tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 63.49206F));
             tableLayoutPanel3.Controls.Add(tableLayoutPanel4, 1, 0);
             tableLayoutPanel3.Controls.Add(tableLayoutPanel5, 1, 1);
-            tableLayoutPanel3.Controls.Add(chkSortSubs, 0, 0);
             tableLayoutPanel3.Controls.Add(chkPriorityPlatform, 0, 1);
+            tableLayoutPanel3.Controls.Add(chkSortSubs, 0, 0);
             tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel3.Location = new System.Drawing.Point(0, 263);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -149,15 +150,17 @@
             // tableLayoutPanel5
             // 
             tableLayoutPanel5.ColumnCount = 1;
-            tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel5.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel5.Controls.Add(btnDelete, 0, 0);
             tableLayoutPanel5.Controls.Add(btnSort, 0, 1);
+            tableLayoutPanel5.Controls.Add(button1, 0, 2);
             tableLayoutPanel5.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel5.Location = new System.Drawing.Point(118, 155);
             tableLayoutPanel5.Name = "tableLayoutPanel5";
-            tableLayoutPanel5.RowCount = 2;
-            tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            tableLayoutPanel5.RowCount = 3;
+            tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.3333321F));
+            tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.3333321F));
+            tableLayoutPanel5.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.3333321F));
             tableLayoutPanel5.Size = new System.Drawing.Size(194, 147);
             tableLayoutPanel5.TabIndex = 1;
             // 
@@ -166,7 +169,7 @@
             btnDelete.Dock = System.Windows.Forms.DockStyle.Fill;
             btnDelete.Location = new System.Drawing.Point(3, 3);
             btnDelete.Name = "btnDelete";
-            btnDelete.Size = new System.Drawing.Size(188, 67);
+            btnDelete.Size = new System.Drawing.Size(188, 43);
             btnDelete.TabIndex = 2;
             btnDelete.Text = "Удалить";
             btnDelete.UseVisualStyleBackColor = true;
@@ -174,32 +177,41 @@
             // btnSort
             // 
             btnSort.Dock = System.Windows.Forms.DockStyle.Fill;
-            btnSort.Location = new System.Drawing.Point(3, 76);
+            btnSort.Location = new System.Drawing.Point(3, 52);
             btnSort.Name = "btnSort";
-            btnSort.Size = new System.Drawing.Size(188, 68);
+            btnSort.Size = new System.Drawing.Size(188, 43);
             btnSort.TabIndex = 3;
             btnSort.Text = "Сортировать";
             btnSort.UseVisualStyleBackColor = true;
             // 
-            // chkSortSubs
+            // button1
             // 
-            chkSortSubs.Dock = System.Windows.Forms.DockStyle.Fill;
-            chkSortSubs.Location = new System.Drawing.Point(3, 3);
-            chkSortSubs.Name = "chkSortSubs";
-            chkSortSubs.Size = new System.Drawing.Size(109, 146);
-            chkSortSubs.TabIndex = 4;
-            chkSortSubs.Text = "Сортировка по подписчикам";
-            chkSortSubs.UseVisualStyleBackColor = true;
+            button1.Dock = System.Windows.Forms.DockStyle.Fill;
+            button1.Location = new System.Drawing.Point(3, 101);
+            button1.Name = "button1";
+            button1.Size = new System.Drawing.Size(188, 43);
+            button1.TabIndex = 4;
+            button1.Text = "Сумма подписчиков по выбранной платформе";
+            button1.UseVisualStyleBackColor = true;
             // 
             // chkPriorityPlatform
             // 
-            chkPriorityPlatform.Dock = System.Windows.Forms.DockStyle.Fill;
+            chkPriorityPlatform.Dock = System.Windows.Forms.DockStyle.Top;
             chkPriorityPlatform.Location = new System.Drawing.Point(3, 155);
             chkPriorityPlatform.Name = "chkPriorityPlatform";
             chkPriorityPlatform.Size = new System.Drawing.Size(109, 147);
             chkPriorityPlatform.TabIndex = 5;
             chkPriorityPlatform.Text = "Сортировка по платформе";
             chkPriorityPlatform.UseVisualStyleBackColor = true;
+            // 
+            // chkSortSubs
+            // 
+            chkSortSubs.Location = new System.Drawing.Point(3, 3);
+            chkSortSubs.Name = "chkSortSubs";
+            chkSortSubs.Size = new System.Drawing.Size(109, 146);
+            chkSortSubs.TabIndex = 4;
+            chkSortSubs.Text = "Сортировка по подписчикам";
+            chkSortSubs.UseVisualStyleBackColor = true;
             // 
             // panelFields
             // 
@@ -385,5 +397,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel5;
         private System.Windows.Forms.Label labelSortPlatform;
         private System.Windows.Forms.ComboBox cmbSortPlatform;
+        private System.Windows.Forms.Button button1;
     }
 }

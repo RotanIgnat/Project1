@@ -10,7 +10,6 @@ namespace ModelBloger
         public int Subscribers { get; set; }
         public string Platform { get; set; }
         public string Topic { get; set; }
-        //public Blogger() { }
         public Blogger(
             int id,
             string name,
