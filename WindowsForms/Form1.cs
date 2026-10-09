@@ -13,6 +13,7 @@ namespace WindowsForms
         /// <summary>
         /// Конструктор формы: подписка на события и первичная загрузка данных.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         public Form1()
         {
             InitializeComponent();
@@ -28,8 +29,9 @@ namespace WindowsForms
         }
 
         /// <summary>
-        /// Загружает полный список блогеров в таблицу.
+        /// Загружает полный список блогеров в таблицу и обновляет ComboBox.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private void LoadData()
         {
             TableYouTubers.DataSource = null;
@@ -50,6 +52,7 @@ namespace WindowsForms
         /// <summary>
         /// Обновляет список платформ в ComboBox по актуальным данным.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private void UpdatePlatformList()
         {
             string oldChoice = cmbSortPlatform.SelectedItem as string;
@@ -77,6 +80,7 @@ namespace WindowsForms
         /// <summary>
         /// Переименовывает заголовки колонок таблицы на русские.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private void RenameColumns()
         {
             SetHeader("Id", "ID");
@@ -91,6 +95,7 @@ namespace WindowsForms
         /// </summary>
         /// <param name="columnName">Имя колонки.</param>
         /// <param name="headerText">Новый заголовок.</param>
+        /// <returns>Ничего не возвращает.</returns>
         private void SetHeader(string columnName, string headerText)
         {
             if (TableYouTubers.Columns[columnName] != null)
@@ -100,8 +105,9 @@ namespace WindowsForms
         }
 
         /// <summary>
-        /// Очищает поля ввода.
+        /// Очищает все поля ввода на форме.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private void ClearFields()
         {
             textName.Clear();
@@ -143,6 +149,9 @@ namespace WindowsForms
         /// <summary>
         /// Обработчик смены выделенной строки: переносит данные блогера в поля ввода.
         /// </summary>
+        /// <param name="sender">Источник события.</param>
+        /// <param name="e">Параметры события.</param>
+        /// <returns>Ничего не возвращает.</returns>
         private void TableYouTubers_SelectionChanged(object sender, EventArgs e)
         {
             if (TableYouTubers.CurrentRow == null)
@@ -165,6 +174,9 @@ namespace WindowsForms
         /// <summary>
         /// Добавляет нового блогера с автоматически сгенерированным ID.
         /// </summary>
+        /// <param name="sender">Источник события.</param>
+        /// <param name="e">Параметры события.</param>
+        /// <returns>Ничего не возвращает.</returns>
         private void btnAdd_Click(object sender, EventArgs e)
         {
             string name, platform, topic;
@@ -193,6 +205,9 @@ namespace WindowsForms
         /// <summary>
         /// Изменяет выбранного в таблице блогера.
         /// </summary>
+        /// <param name="sender">Источник события.</param>
+        /// <param name="e">Параметры события.</param>
+        /// <returns>Ничего не возвращает.</returns>
         private void btnEdit_Click(object sender, EventArgs e)
         {
             if (TableYouTubers.CurrentRow == null)
@@ -224,6 +239,9 @@ namespace WindowsForms
         /// <summary>
         /// Удаляет выбранного блогера после подтверждения.
         /// </summary>
+        /// <param name="sender">Источник события.</param>
+        /// <param name="e">Параметры события.</param>
+        /// <returns>Ничего не возвращает.</returns>
         private void btnDelete_Click(object sender, EventArgs e)
         {
             if (TableYouTubers.CurrentRow == null)
@@ -255,6 +273,9 @@ namespace WindowsForms
         /// <summary>
         /// Применяет сортировку или фильтрацию в зависимости от состояния галочек.
         /// </summary>
+        /// <param name="sender">Источник события.</param>
+        /// <param name="e">Параметры события.</param>
+        /// <returns>Ничего не возвращает.</returns>
         private void btnSort_Click(object sender, EventArgs e)
         {
             bool bySubs = chkSortSubs.Checked;
@@ -309,6 +330,9 @@ namespace WindowsForms
         /// <summary>
         /// Показывает сумму подписчиков для платформы, выбранной в ComboBox.
         /// </summary>
+        /// <param name="sender">Источник события.</param>
+        /// <param name="e">Параметры события.</param>
+        /// <returns>Ничего не возвращает.</returns>
         private void button1_Click(object sender, EventArgs e)
         {
             string platform = cmbSortPlatform.SelectedItem as string;

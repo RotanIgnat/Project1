@@ -12,6 +12,8 @@ namespace ConsoleApp
         /// <summary>
         /// Точка входа, главное меню программы.
         /// </summary>
+        /// <param name="args">Аргументы командной строки.</param>
+        /// <returns>Ничего не возвращает.</returns>
         static void Main(string[] args)
         {
             bool isRunning = true;
@@ -78,6 +80,7 @@ namespace ConsoleApp
         /// <summary>
         /// Выводит список всех блогеров в виде таблицы.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private static void ShowAllBloggers()
         {
             PrintAllBloggers();
@@ -85,8 +88,9 @@ namespace ConsoleApp
         }
 
         /// <summary>
-        /// Печатает таблицу блогеров (без паузы) — используется в других методах.
+        /// Печатает таблицу блогеров без паузы. Используется в других методах.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private static void PrintAllBloggers()
         {
             List<Blogger> list = _logic.ReadTable();
@@ -111,6 +115,7 @@ namespace ConsoleApp
         /// <summary>
         /// Запрашивает у пользователя данные и добавляет нового блогера.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private static void AddNewBlogger()
         {
             Console.WriteLine("--- Добавление нового блогера ---");
@@ -206,6 +211,7 @@ namespace ConsoleApp
         /// <summary>
         /// Показывает список блогеров, затем удаляет выбранного по ID.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private static void DeleteBlogger()
         {
             Console.WriteLine("--- Удаление блогера ---");
@@ -228,6 +234,7 @@ namespace ConsoleApp
         /// <summary>
         /// Показывает список, запрашивает ID, затем новые значения полей и сохраняет изменения.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private static void EditBlogger()
         {
             Console.WriteLine("--- Редактирование блогера ---");
@@ -305,6 +312,7 @@ namespace ConsoleApp
         /// <summary>
         /// Запрашивает платформу из списка и выводит только блогеров этой платформы.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private static void FilterBloggers()
         {
             Console.WriteLine("--- Фильтрация по платформе ---");
@@ -370,6 +378,7 @@ namespace ConsoleApp
         /// <summary>
         /// Спрашивает платформу из списка и выполняет двухуровневую сортировку.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private static void SortSubscribersWithPlatformPriority()
         {
             Console.WriteLine("--- Двухуровневая сортировка ---");
@@ -416,6 +425,7 @@ namespace ConsoleApp
         /// <summary>
         /// Спрашивает платформу из списка, выводит сумму подписчиков и таблицу блогеров этой платформы.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private static void ShowSubscribersByPlatform()
         {
             Console.WriteLine("--- Сумма подписчиков по платформе ---");
@@ -504,6 +514,7 @@ namespace ConsoleApp
         /// <summary>
         /// Пауза: ждёт нажатия клавиши перед возвратом в меню.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         private static void WaitForKey()
         {
             Console.WriteLine("\nНажмите любую клавишу для возврата в меню...");
