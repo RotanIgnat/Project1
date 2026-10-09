@@ -21,8 +21,14 @@ namespace ConsoleApp
             while (isRunning)
             {
                 Console.Clear();
-                Console.WriteLine("=== ТЕРМИНАЛ УПРАВЛЕНИЯ БЛОГЕРАМИ ===");
-                Console.WriteLine("1. Вывести список всех блогеров");
+
+                string filter = _logic.GetCurrentFilter();
+                if (filter != null)
+                {
+                    Console.WriteLine($"[Активен фильтр: {filter}]");
+                }
+
+                Console.WriteLine("1. Вывести список блогеров");
                 Console.WriteLine("2. Добавить нового блогера");
                 Console.WriteLine("3. Удалить блогера по ID");
                 Console.WriteLine("4. Редактировать блогера по ID");
@@ -53,7 +59,7 @@ namespace ConsoleApp
                         break;
                     case "5":
                         _logic.SortSubscribers();
-                        Console.WriteLine("Список успешно отсортирован по убыванию подписчиков!");
+                        Console.WriteLine("Список отсортирован.");
                         WaitForKey();
                         break;
                     case "6":
@@ -78,17 +84,29 @@ namespace ConsoleApp
         }
 
         /// <summary>
-        /// Выводит список всех блогеров в виде таблицы.
+        /// Выводит список блогеров с учётом текущего фильтра.
         /// </summary>
         /// <returns>Ничего не возвращает.</returns>
         private static void ShowAllBloggers()
         {
+            string filter = _logic.GetCurrentFilter();
+
+            if (filter != null)
+            {
+                Console.WriteLine($"Список блогеров (фильтр: {filter}):");
+            }
+            else
+            {
+                Console.WriteLine("Список всех блогеров:");
+            }
+            Console.WriteLine();
+
             PrintAllBloggers();
             WaitForKey();
         }
 
         /// <summary>
-        /// Печатает таблицу блогеров без паузы. Используется в других методах.
+        /// Печатает таблицу блогеров с учётом текущего фильтра.
         /// </summary>
         /// <returns>Ничего не возвращает.</returns>
         private static void PrintAllBloggers()
@@ -249,7 +267,7 @@ namespace ConsoleApp
                 return;
             }
 
-            Blogger current = _logic.ReadTable().FirstOrDefault(b => b.Id == id);
+            Blogger current = _logic.FindById(id);
             if (current == null)
             {
                 Console.WriteLine($"Блогер с ID {id} не найден.");
@@ -310,14 +328,14 @@ namespace ConsoleApp
         }
 
         /// <summary>
-        /// Запрашивает платформу из списка и выводит только блогеров этой платформы.
+        /// Запрашивает платформу из полного списка и устанавливает фильтр.
         /// </summary>
         /// <returns>Ничего не возвращает.</returns>
         private static void FilterBloggers()
         {
             Console.WriteLine("--- Фильтрация по платформе ---");
 
-            List<string> platforms = _logic.ReadTable()
+            List<string> platforms = _logic.GetAllBloggers()
                 .Select(b => b.Platform)
                 .Where(p => !string.IsNullOrWhiteSpace(p))
                 .Distinct()
@@ -349,41 +367,22 @@ namespace ConsoleApp
             }
 
             string chosen = platforms[number - 1];
-            List<Blogger> filtered = _logic.FilterByPlatform(chosen);
-
-            if (filtered.Count == 0)
-            {
-                Console.WriteLine($"Нет блогеров с платформой \"{chosen}\".");
-                WaitForKey();
-                return;
-            }
+            _logic.FilterByPlatform(chosen);
 
             Console.WriteLine();
-            Console.WriteLine($"Блогеры с платформой \"{chosen}\":");
-            Console.WriteLine();
-
-            Console.WriteLine("{0,-5} | {1,-20} | {2,-15} | {3,-12} | {4,-15}",
-                "ID", "Имя", "Подписчики", "Платформа", "Тематика");
-            Console.WriteLine(new string('-', 75));
-
-            foreach (Blogger b in filtered)
-            {
-                Console.WriteLine("{0,-5} | {1,-20} | {2,-15:N0} | {3,-12} | {4,-15}",
-                    b.Id, b.Name, b.Subscribers, b.Platform, b.Topic);
-            }
-
+            Console.WriteLine($"Фильтр по платформе \"{chosen}\" установлен.");
             WaitForKey();
         }
 
         /// <summary>
-        /// Спрашивает платформу из списка и выполняет двухуровневую сортировку.
+        /// Спрашивает платформу из полного списка и выполняет двухуровневую сортировку.
         /// </summary>
         /// <returns>Ничего не возвращает.</returns>
         private static void SortSubscribersWithPlatformPriority()
         {
             Console.WriteLine("--- Двухуровневая сортировка ---");
 
-            List<string> platforms = _logic.ReadTable()
+            List<string> platforms = _logic.GetAllBloggers()
                 .Select(b => b.Platform)
                 .Where(p => !string.IsNullOrWhiteSpace(p))
                 .Distinct()
@@ -418,19 +417,19 @@ namespace ConsoleApp
             _logic.SortSubscribersWithPlatformPriority(chosen);
 
             Console.WriteLine();
-            Console.WriteLine($"Список пересортирован. Платформа \"{chosen}\" — наверху, внутри — по подписчикам.");
+            Console.WriteLine("Список отсортирован.");
             WaitForKey();
         }
 
         /// <summary>
-        /// Спрашивает платформу из списка, выводит сумму подписчиков и таблицу блогеров этой платформы.
+        /// Спрашивает платформу из полного списка, выводит сумму подписчиков и таблицу блогеров этой платформы.
         /// </summary>
         /// <returns>Ничего не возвращает.</returns>
         private static void ShowSubscribersByPlatform()
         {
             Console.WriteLine("--- Сумма подписчиков по платформе ---");
 
-            List<string> platforms = _logic.ReadTable()
+            List<string> platforms = _logic.GetAllBloggers()
                 .Select(b => b.Platform)
                 .Where(p => !string.IsNullOrWhiteSpace(p))
                 .Distinct()
@@ -463,7 +462,15 @@ namespace ConsoleApp
 
             string chosen = platforms[number - 1];
             long total = _logic.GetSubscribersByPlatform(chosen);
-            List<Blogger> filtered = _logic.FilterByPlatform(chosen);
+
+            List<Blogger> filtered = new List<Blogger>();
+            foreach (Blogger b in _logic.GetAllBloggers())
+            {
+                if (b.Platform.Equals(chosen, StringComparison.OrdinalIgnoreCase))
+                {
+                    filtered.Add(b);
+                }
+            }
 
             Console.WriteLine();
             Console.WriteLine($"Платформа \"{chosen}\": {total:N0} подписчиков всего.");
@@ -500,7 +507,7 @@ namespace ConsoleApp
 
             string trimmed = input.Trim();
 
-            foreach (Blogger b in _logic.ReadTable())
+            foreach (Blogger b in _logic.GetAllBloggers())
             {
                 if (b.Platform.Equals(trimmed, StringComparison.OrdinalIgnoreCase))
                 {

@@ -201,8 +201,9 @@
             chkPriorityPlatform.Name = "chkPriorityPlatform";
             chkPriorityPlatform.Size = new System.Drawing.Size(109, 147);
             chkPriorityPlatform.TabIndex = 5;
-            chkPriorityPlatform.Text = "Сортировка по платформе";
+            chkPriorityPlatform.Text = "Фильтрация по платформе";
             chkPriorityPlatform.UseVisualStyleBackColor = true;
+            chkPriorityPlatform.CheckedChanged += chkPriorityPlatform_CheckedChanged;
             // 
             // chkSortSubs
             // 

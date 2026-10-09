@@ -29,7 +29,7 @@ namespace WindowsForms
         }
 
         /// <summary>
-        /// Загружает полный список блогеров в таблицу и обновляет ComboBox.
+        /// Загружает список блогеров в таблицу с учётом текущего фильтра и обновляет ComboBox.
         /// </summary>
         /// <returns>Ничего не возвращает.</returns>
         private void LoadData()
@@ -45,12 +45,16 @@ namespace WindowsForms
             {
                 TableYouTubers.Rows[0].Selected = true;
             }
+            else
+            {
+                ClearFields();
+            }
 
             UpdatePlatformList();
         }
 
         /// <summary>
-        /// Обновляет список платформ в ComboBox по актуальным данным.
+        /// Обновляет список платформ в ComboBox по полному списку блогеров.
         /// </summary>
         /// <returns>Ничего не возвращает.</returns>
         private void UpdatePlatformList()
@@ -59,7 +63,7 @@ namespace WindowsForms
 
             cmbSortPlatform.Items.Clear();
 
-            foreach (Blogger b in logic.ReadTable())
+            foreach (Blogger b in logic.GetAllBloggers())
             {
                 if (!cmbSortPlatform.Items.Contains(b.Platform))
                 {
@@ -188,9 +192,9 @@ namespace WindowsForms
             }
 
             int newId = 1;
-            if (logic.ReadTable().Count > 0)
+            if (logic.GetAllBloggers().Count > 0)
             {
-                newId = logic.ReadTable().Max(b => b.Id) + 1;
+                newId = logic.GetAllBloggers().Max(b => b.Id) + 1;
             }
 
             platform = NormalizePlatform(platform);
@@ -308,17 +312,8 @@ namespace WindowsForms
                     return;
                 }
 
-                List<Blogger> filtered = logic.FilterByPlatform(platform);
-
-                TableYouTubers.DataSource = null;
-                TableYouTubers.DataSource = filtered;
-                TableYouTubers.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-                RenameColumns();
-
-                if (TableYouTubers.Rows.Count > 0)
-                {
-                    TableYouTubers.Rows[0].Selected = true;
-                }
+                logic.FilterByPlatform(platform);
+                LoadData();
             }
             else
             {
@@ -368,7 +363,7 @@ namespace WindowsForms
 
             string trimmed = input.Trim();
 
-            foreach (Blogger b in logic.ReadTable())
+            foreach (Blogger b in logic.GetAllBloggers())
             {
                 if (b.Platform.Equals(trimmed, StringComparison.OrdinalIgnoreCase))
                 {
@@ -377,6 +372,11 @@ namespace WindowsForms
             }
 
             return trimmed;
+        }
+
+        private void chkPriorityPlatform_CheckedChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

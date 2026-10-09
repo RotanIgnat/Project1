@@ -20,19 +20,23 @@ namespace ModelBloger
             new Blogger(10, "PythonGuy", 120000, "Telegram", "Education")
         };
 
+        private string currentFilterPlatform = null;
+
         /// <summary>
-        /// Добавляет нового блогера в список.
+        /// Добавляет нового блогера в полный список.
         /// </summary>
         /// <param name="blogger">Блогер для добавления.</param>
+        /// <returns>Ничего не возвращает.</returns>
         public void AddBlogger(Blogger blogger)
         {
             bloggers.Add(blogger);
         }
 
         /// <summary>
-        /// Удаляет блогера по его ID, если он существует.
+        /// Удаляет блогера по его ID из полного списка.
         /// </summary>
         /// <param name="id">ID блогера для удаления.</param>
+        /// <returns>Ничего не возвращает.</returns>
         public void RemoveBlogger(int id)
         {
             Blogger blogger = bloggers.Find(x => x.Id == id);
@@ -43,13 +47,14 @@ namespace ModelBloger
         }
 
         /// <summary>
-        /// Изменяет данные блогера по его ID.
+        /// Изменяет данные блогера по его ID в полном списке.
         /// </summary>
         /// <param name="name">Новое имя блогера.</param>
         /// <param name="id">ID блогера для изменения.</param>
         /// <param name="subscribers">Новое количество подписчиков.</param>
         /// <param name="platform">Новая платформа.</param>
         /// <param name="topic">Новая тематика.</param>
+        /// <returns>Ничего не возвращает.</returns>
         public void Change(
             string name,
             int id,
@@ -78,46 +83,42 @@ namespace ModelBloger
         }
 
         /// <summary>
-        /// Возвращает весь список блогеров.
+        /// Ищет блогера по ID в полном списке.
         /// </summary>
-        /// <returns>Список блогеров.</returns>
-        public List<Blogger> ReadTable()
+        /// <param name="id">ID блогера.</param>
+        /// <returns>Блогер с указанным ID или null, если не найден.</returns>
+        public Blogger FindById(int id)
+        {
+            return bloggers.FirstOrDefault(b => b.Id == id);
+        }
+
+        /// <summary>
+        /// Возвращает ПОЛНЫЙ список блогеров, без учёта фильтра.
+        /// Используется для сортировок, поиска, подсчётов — всего, что должно работать на всей базе.
+        /// </summary>
+        /// <returns>Полный список блогеров.</returns>
+        public List<Blogger> GetAllBloggers()
         {
             return bloggers;
         }
 
         /// <summary>
-        /// Сортирует блогеров по убыванию числа подписчиков.
+        /// Возвращает список блогеров для показа пользователю.
+        /// Если установлен фильтр — только блогеров указанной платформы.
         /// </summary>
-        public void SortSubscribers()
+        /// <returns>Список блогеров с учётом фильтра.</returns>
+        public List<Blogger> ReadTable()
         {
-            bloggers.Sort((x, y) => y.Subscribers.CompareTo(x.Subscribers));
-        }
+            if (currentFilterPlatform == null)
+            {
+                return bloggers;
+            }
 
-        /// <summary>
-        /// Двухуровневая сортировка: сначала блогеры указанной платформы, затем по подписчикам.
-        /// </summary>
-        /// <param name="targetPlatform">Платформа, которая должна быть вверху.</param>
-        public void SortSubscribersWithPlatformPriority(string targetPlatform)
-        {
-            bloggers = bloggers
-                .OrderByDescending(b => b.Platform.Equals(targetPlatform, StringComparison.OrdinalIgnoreCase))
-                .ThenByDescending(b => b.Subscribers)
-                .ToList();
-        }
-
-        /// <summary>
-        /// Возвращает список блогеров, у которых платформа совпадает с указанной.
-        /// </summary>
-        /// <param name="platform">Название платформы для фильтрации.</param>
-        /// <returns>Список блогеров только этой платформы.</returns>
-        public List<Blogger> FilterByPlatform(string platform)
-        {
             List<Blogger> result = new List<Blogger>();
 
             foreach (Blogger b in bloggers)
             {
-                if (b.Platform.Equals(platform, StringComparison.OrdinalIgnoreCase))
+                if (b.Platform.Equals(currentFilterPlatform, StringComparison.OrdinalIgnoreCase))
                 {
                     result.Add(b);
                 }
@@ -127,7 +128,61 @@ namespace ModelBloger
         }
 
         /// <summary>
+        /// Устанавливает фильтр по платформе. Список будет показывать только её блогеров.
+        /// </summary>
+        /// <param name="platform">Название платформы.</param>
+        /// <returns>Ничего не возвращает.</returns>
+        public void FilterByPlatform(string platform)
+        {
+            currentFilterPlatform = platform;
+        }
+
+        /// <summary>
+        /// Сбрасывает фильтр по платформе.
+        /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
+        public void ClearFilter()
+        {
+            currentFilterPlatform = null;
+        }
+
+        /// <summary>
+        /// Возвращает текущую платформу, по которой установлен фильтр.
+        /// </summary>
+        /// <returns>Название платформы или null, если фильтр не установлен.</returns>
+        public string GetCurrentFilter()
+        {
+            return currentFilterPlatform;
+        }
+
+        /// <summary>
+        /// Сортирует полный список блогеров по убыванию числа подписчиков и сбрасывает фильтр.
+        /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
+        public void SortSubscribers()
+        {
+            bloggers.Sort((x, y) => y.Subscribers.CompareTo(x.Subscribers));
+            currentFilterPlatform = null;
+        }
+
+        /// <summary>
+        /// Двухуровневая сортировка полного списка и сброс фильтра.
+        /// </summary>
+        /// <param name="targetPlatform">Платформа, которая должна быть вверху.</param>
+        /// <returns>Ничего не возвращает.</returns>
+        public void SortSubscribersWithPlatformPriority(string targetPlatform)
+        {
+            bloggers = bloggers
+                .OrderByDescending(b => b.Platform.Equals(targetPlatform, StringComparison.OrdinalIgnoreCase))
+                .ThenByDescending(b => b.Subscribers)
+                .ToList();
+
+            currentFilterPlatform = null;
+        }
+
+        /// <summary>
         /// Возвращает сумму подписчиков всех блогеров указанной платформы.
+        /// Работает по полному списку, независимо от фильтра.
         /// </summary>
         /// <param name="platform">Название платформы.</param>
         /// <returns>Суммарное число подписчиков блогеров этой платформы.</returns>
