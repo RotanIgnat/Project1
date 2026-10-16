@@ -1,9 +1,22 @@
-﻿using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+﻿using ModelBloger.ModelBloger;
 
 namespace ModelBloger
 {
-    public class Blogger
+    namespace ModelBloger
+    {
+        /// <summary>
+        /// Базовый интерфейс для сущностей предметной области.
+        /// Требует наличие свойства Id.
+        /// </summary>
+        public interface IDomainObject
+        {
+            /// <summary>
+            /// Уникальный идентификатор сущности.
+            /// </summary>
+            int Id { get; set; }
+        }
+    }
+    public class Blogger : IDomainObject
     {
         public string Name { get; set; }
         public int Id {  get; set; }
