@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using ModelBloger;
+using DataAccessLayer;
 
 namespace ConsoleApp
 {
@@ -16,6 +17,12 @@ namespace ConsoleApp
         /// <returns>Ничего не возвращает.</returns>
         static void Main(string[] args)
         {
+            var repo = new EntityRepository<Blogger>();
+            repo.Create(new Blogger(999, "TestUser", 12345, "YouTube", "Test"));
+            Console.WriteLine("Добавлено!");
+            Console.ReadKey();
+            return; 
+
             bool isRunning = true;
 
             while (isRunning)

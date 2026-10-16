@@ -37,6 +37,7 @@ namespace ModelBloger
             Platform = platform;
             Topic = topic;
         }
+        public Blogger() { }
     }
 
 }
