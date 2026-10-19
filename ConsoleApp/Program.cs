@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using ModelBloger;
 using DataAccessLayer;
+using System.Configuration;
 
 namespace ConsoleApp
 {
     internal class Program
     {
-        private static Logic _logic = new Logic();
+        /*private static Logic _logic = new Logic(new EntityRepository<Blogger>());*/
+        private static Logic _logic = new Logic(new DapperRepository<Blogger>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, "Bloggers"));
+
 
         /// <summary>
         /// Точка входа, главное меню программы.
@@ -17,11 +20,6 @@ namespace ConsoleApp
         /// <returns>Ничего не возвращает.</returns>
         static void Main(string[] args)
         {
-            var repo = new EntityRepository<Blogger>();
-            repo.Create(new Blogger(999, "TestUser", 12345, "YouTube", "Test"));
-            Console.WriteLine("Добавлено!");
-            Console.ReadKey();
-            return; 
 
             bool isRunning = true;
 

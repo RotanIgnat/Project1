@@ -1,14 +1,16 @@
-﻿using System;
+﻿using DataAccessLayer;
+using ModelBloger;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using ModelBloger;
 
 namespace WindowsForms
 {
     public partial class Form1 : Form
     {
-        private readonly Logic logic = new Logic();
+        private readonly Logic logic = new Logic(new EntityRepository<Blogger>());
+        /*private static Logic _logic = new Logic(new DapperRepository<Blogger>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString,"Bloggers"));*/
 
         /// <summary>
         /// Конструктор формы: подписка на события и первичная загрузка данных.

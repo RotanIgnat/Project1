@@ -1,11 +1,10 @@
-﻿using ModelBloger.ModelBloger;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer
+namespace ModelBloger
 {
     /// <summary>
     /// Интерфейс репозитория — набор CRUD-операций над сущностью.

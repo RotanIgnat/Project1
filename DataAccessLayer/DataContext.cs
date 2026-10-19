@@ -22,6 +22,7 @@ namespace DataAccessLayer
         /// <param name="optionsBuilder">Построитель опций EF.</param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
+            // Читаем из App.config
             string connectionString = ConfigurationManager
                 .ConnectionStrings["DefaultConnection"]
                 .ConnectionString;
