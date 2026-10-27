@@ -17,34 +17,30 @@
     /// </summary>
     public class Blogger : IDomainObject
     {
-        /// <summary>
-        /// Имя или никнейм блогера.
-        /// </summary>
+        /// <summary>Имя или никнейм блогера.</summary>
         public string Name { get; set; }
 
-        /// <summary>
-        /// Уникальный идентификатор блогера.
-        /// </summary>
+        /// <summary>Уникальный идентификатор блогера.</summary>
         public int Id { get; set; }
 
-        /// <summary>
-        /// Количество подписчиков.
-        /// </summary>
+        /// <summary>Количество подписчиков.</summary>
         public int Subscribers { get; set; }
 
-        /// <summary>
-        /// Платформа (например, YouTube, Twitch).
-        /// </summary>
+        /// <summary>Платформа (например, YouTube, Twitch).</summary>
         public string Platform { get; set; }
 
-        /// <summary>
-        /// Тематика канала (например, Gaming, Tech).
-        /// </summary>
+        /// <summary>Тематика канала (например, Gaming, Tech).</summary>
         public string Topic { get; set; }
 
         /// <summary>
         /// Конструктор с параметрами для создания блогера.
         /// </summary>
+        /// <param name="id">Уникальный идентификатор.</param>
+        /// <param name="name">Имя блогера.</param>
+        /// <param name="subscribers">Количество подписчиков.</param>
+        /// <param name="platform">Платформа.</param>
+        /// <param name="topic">Тематика.</param>
+        /// <returns>Ничего не возвращает.</returns>
         public Blogger(int id, string name, int subscribers, string platform, string topic)
         {
             Name = name;
@@ -57,6 +53,7 @@
         /// <summary>
         /// Пустой конструктор, необходимый для Entity Framework.
         /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         public Blogger() { }
     }
 }

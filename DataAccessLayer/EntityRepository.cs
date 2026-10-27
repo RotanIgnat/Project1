@@ -1,6 +1,6 @@
-﻿using ModelBloger;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using ModelBloger;
 
 namespace DataAccessLayer
 {
@@ -12,28 +12,38 @@ namespace DataAccessLayer
     {
         private readonly DataContext context;
 
-        /// <summary>Конструктор.</summary>
+        /// <summary>
+        /// Конструктор репозитория Entity Framework.
+        /// </summary>
+        /// <returns>Ничего не возвращает.</returns>
         public EntityRepository()
         {
             context = new DataContext();
         }
 
-        /// <summary>Добавляет объект в БД.</summary>
+        /// <summary>
+        /// Добавляет объект в БД.
+        /// </summary>
         /// <param name="obj">Объект для добавления.</param>
+        /// <returns>Ничего не возвращает.</returns>
         public void Create(T obj)
         {
             context.Set<T>().Add(obj);
             context.SaveChanges();
         }
 
-        /// <summary>Возвращает все объекты.</summary>
+        /// <summary>
+        /// Возвращает все объекты из БД.
+        /// </summary>
         /// <returns>Список объектов.</returns>
         public IEnumerable<T> ReadAll()
         {
             return context.Set<T>().ToList();
         }
 
-        /// <summary>Возвращает объект по ID.</summary>
+        /// <summary>
+        /// Возвращает объект по ID.
+        /// </summary>
         /// <param name="id">ID объекта.</param>
         /// <returns>Объект или null.</returns>
         public T ReadById(int id)
@@ -41,8 +51,11 @@ namespace DataAccessLayer
             return context.Set<T>().FirstOrDefault(x => x.Id == id);
         }
 
-        /// <summary>Обновляет объект.</summary>
+        /// <summary>
+        /// Обновляет объект в БД.
+        /// </summary>
         /// <param name="obj">Обновлённый объект.</param>
+        /// <returns>Ничего не возвращает.</returns>
         public void Update(T obj)
         {
             T origin = context.Set<T>().FirstOrDefault(x => x.Id == obj.Id);
@@ -53,8 +66,11 @@ namespace DataAccessLayer
             }
         }
 
-        /// <summary>Удаляет объект.</summary>
+        /// <summary>
+        /// Удаляет объект из БД.
+        /// </summary>
         /// <param name="obj">Удаляемый объект.</param>
+        /// <returns>Ничего не возвращает.</returns>
         public void Delete(T obj)
         {
             context.Set<T>().Remove(obj);

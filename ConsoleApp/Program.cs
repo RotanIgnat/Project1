@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using ModelBloger;
 using DataAccessLayer;
+using BusinessLogic;
 using System.Configuration;
 
 namespace ConsoleApp
 {
     internal class Program
     {
-        /*private static Logic _logic = new Logic(new EntityRepository<Blogger>());*/
-        private static Logic _logic = new Logic(new DapperRepository<Blogger>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, "Bloggers"));
+        private static Logic _logic = new Logic(new EntityRepository<Blogger>());
+        ///private static Logic _logic = new Logic(new DapperRepository<Blogger>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, "Bloggers"));
 
 
         /// <summary>

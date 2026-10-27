@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ModelBloger;
+using DataAccessLayer;
 
-namespace ModelBloger
+namespace BusinessLogic
 {
     /// <summary>
     /// Класс бизнес-логики для управления блогерами.

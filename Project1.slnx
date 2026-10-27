@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="BusinessLogic/BusinessLogic.csproj" Id="90018a44-9d0e-47ac-af64-ffae26bf35a5" />
   <Project Path="ConsoleApp/ConsoleApp.csproj">
     <BuildDependency Project="ModelBloger/ModelBloger.csproj" />
   </Project>

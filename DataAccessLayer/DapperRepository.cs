@@ -16,10 +16,11 @@ namespace DataAccessLayer
         private readonly string tableName;
 
         /// <summary>
-        /// Конструктор.
+        /// Конструктор репозитория Dapper.
         /// </summary>
         /// <param name="connectionString">Строка подключения к БД.</param>
         /// <param name="tableName">Имя таблицы (например, "Bloggers").</param>
+        /// <returns>Ничего не возвращает.</returns>
         public DapperRepository(string connectionString, string tableName)
         {
             this.connectionString = connectionString;
@@ -34,8 +35,9 @@ namespace DataAccessLayer
         public void Create(T obj)
         {
             using var db = new SqlConnection(connectionString);
-            string sql = $"INSERT INTO {tableName} (Name, Subscribers, Platform, Topic) " +
-                         "VALUES (@Name, @Subscribers, @Platform, @Topic)";
+            // ИСПРАВЛЕНО: добавлен Id и @Id
+            string sql = $"INSERT INTO {tableName} (Id, Name, Subscribers, Platform, Topic) " +
+                         "VALUES (@Id, @Name, @Subscribers, @Platform, @Topic)";
             db.Execute(sql, obj);
         }
 
