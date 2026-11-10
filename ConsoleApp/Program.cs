@@ -1,22 +1,19 @@
-﻿using BusinessLogic;
-using DataAccessLayer;
-using ModelBloger;
-using Ninject;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
+using ModelBloger;
+using DataAccessLayer;
+using BusinessLogic;
+using System.Configuration;
+using Ninject; // ДОБАВЛЕНО: для DI-контейнера
 
 namespace ConsoleApp
 {
     internal class Program
     {
-        // Контейнер 
+        // ИЗМЕНЕНО: используем контейнер вместо new
         private static IKernel ninjectKernel = new StandardKernel(new SimpleConfigModule());
-
-        // Получаем Logic через контейнер
         private static Logic _logic = ninjectKernel.Get<Logic>();
-
 
         /// <summary>
         /// Точка входа, главное меню программы.
@@ -25,7 +22,6 @@ namespace ConsoleApp
         /// <returns>Ничего не возвращает.</returns>
         static void Main(string[] args)
         {
-
             bool isRunning = true;
 
             while (isRunning)
@@ -55,40 +51,16 @@ namespace ConsoleApp
 
                 switch (choice)
                 {
-                    case "1":
-                        ShowAllBloggers();
-                        break;
-                    case "2":
-                        AddNewBlogger();
-                        break;
-                    case "3":
-                        DeleteBlogger();
-                        break;
-                    case "4":
-                        EditBlogger();
-                        break;
-                    case "5":
-                        _logic.SortSubscribers();
-                        Console.WriteLine("Список отсортирован.");
-                        WaitForKey();
-                        break;
-                    case "6":
-                        FilterBloggers();
-                        break;
-                    case "7":
-                        SortSubscribersWithPlatformPriority();
-                        break;
-                    case "8":
-                        ShowSubscribersByPlatform();
-                        break;
-                    case "0":
-                        isRunning = false;
-                        Console.WriteLine("Программа завершена. До свидания!");
-                        break;
-                    default:
-                        Console.WriteLine("Ошибка: Неверный пункт меню. Попробуйте снова.");
-                        WaitForKey();
-                        break;
+                    case "1": ShowAllBloggers(); break;
+                    case "2": AddNewBlogger(); break;
+                    case "3": DeleteBlogger(); break;
+                    case "4": EditBlogger(); break;
+                    case "5": _logic.SortSubscribers(); Console.WriteLine("Список отсортирован."); WaitForKey(); break;
+                    case "6": FilterBloggers(); break;
+                    case "7": SortSubscribersWithPlatformPriority(); break;
+                    case "8": ShowSubscribersByPlatform(); break;
+                    case "0": isRunning = false; Console.WriteLine("Программа завершена. До свидания!"); break;
+                    default: Console.WriteLine("Ошибка: Неверный пункт меню. Попробуйте снова."); WaitForKey(); break;
                 }
             }
         }

@@ -1,33 +1,11 @@
-﻿using Ninject.Modules;
-using DataAccessLayer;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using ModelBloger;
-using System.Configuration;
+using DataAccessLayer;
 
 namespace BusinessLogic
 {
-    /// <summary>
-    /// Модуль конфигурации для DI-контейнера Ninject.
-    /// Устанавливает соответствия между интерфейсами и их реализациями.
-    /// </summary>
-    public class SimpleConfigModule : NinjectModule
-    {
-        /// <summary>
-        /// Загружает правила внедрения зависимостей.
-        /// </summary>
-        /// <returns>Ничего не возвращает.</returns>
-        public override void Load()
-        {
-            Bind<IRepository<Blogger>>().To<EntityRepository<Blogger>>().InSingletonScope();
-
-            // Вариант с Dapper (требует передачи строки подключения):
-            /* Bind<IRepository<Blogger>>()
-                 .To<DapperRepository<Blogger>>()
-                 .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString)
-                 .WithConstructorArgument("tableName", "Bloggers")
-               .InSingletonScope();
-            */
-        }
-    }
     /// <summary>
     /// Класс бизнес-логики для управления блогерами.
     /// </summary>
@@ -39,15 +17,16 @@ namespace BusinessLogic
         /// Конструктор бизнес-логики.
         /// </summary>
         /// <param name="repository">Репозиторий для работы с данными.</param>
+        /// <returns>Ничего не возвращает.</returns>
         public Logic(IRepository<Blogger> repository)
         {
             this.repository = repository;
         }
 
         // Переменные состояния для фильтрации и сортировки
-        private string currentFilterPlatform = null;
+        private string? currentFilterPlatform = null;
         private bool sortBySubscribers = false;
-        private string sortByPlatformPriority = null;
+        private string? sortByPlatformPriority = null;
 
         /// <summary>
         /// Добавляет нового блогера в базу данных.
@@ -66,7 +45,7 @@ namespace BusinessLogic
         /// <returns>Ничего не возвращает.</returns>
         public void RemoveBlogger(int id)
         {
-            Blogger blogger = repository.ReadById(id);
+            Blogger? blogger = repository.ReadById(id);
             if (blogger != null)
             {
                 repository.Delete(blogger);
@@ -84,7 +63,7 @@ namespace BusinessLogic
         /// <returns>Ничего не возвращает.</returns>
         public void Change(string name, int id, int subscribers, string platform, string topic)
         {
-            Blogger blogger = repository.ReadById(id);
+            Blogger? blogger = repository.ReadById(id);
             if (blogger != null)
             {
                 blogger.Name = name;
@@ -111,7 +90,7 @@ namespace BusinessLogic
         /// </summary>
         /// <param name="id">ID блогера.</param>
         /// <returns>Блогер с указанным ID или null, если не найден.</returns>
-        public Blogger FindById(int id)
+        public Blogger? FindById(int id)
         {
             return repository.ReadById(id);
         }
@@ -133,6 +112,7 @@ namespace BusinessLogic
         {
             List<Blogger> list = repository.ReadAll().ToList();
 
+            // Фильтрация
             if (currentFilterPlatform != null)
             {
                 List<Blogger> filteredList = new List<Blogger>();
@@ -146,6 +126,7 @@ namespace BusinessLogic
                 list = filteredList;
             }
 
+            // Сортировка
             if (sortByPlatformPriority != null)
             {
                 list = list.OrderByDescending(b => b.Platform.Equals(sortByPlatformPriority, StringComparison.OrdinalIgnoreCase))
@@ -183,7 +164,7 @@ namespace BusinessLogic
         /// Возвращает текущую платформу, по которой установлен фильтр.
         /// </summary>
         /// <returns>Название платформы или null.</returns>
-        public string GetCurrentFilter()
+        public string? GetCurrentFilter()
         {
             return currentFilterPlatform;
         }

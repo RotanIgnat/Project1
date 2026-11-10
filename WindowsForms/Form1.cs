@@ -1,28 +1,33 @@
-﻿using BusinessLogic;
+﻿using ModelBloger;
 using DataAccessLayer;
-using ModelBloger;
-using Ninject;
+using BusinessLogic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using System.Configuration;
+using Ninject;
 
 namespace WindowsForms
 {
     public partial class Form1 : Form
     {
-        // контейнер
+        //контейнер
         private IKernel ninjectKernel = new StandardKernel(new SimpleConfigModule());
-        // Получаем Logic через контейнер
+
+        // Логика создастся через контейнер в конструкторе
         private readonly Logic logic;
 
-        /// <summary>
+        /// <summary>   
         /// Конструктор формы: подписка на события и первичная загрузка данных.
         /// </summary>
         /// <returns>Ничего не возвращает.</returns>
         public Form1()
         {
             InitializeComponent();
+
+            // Внедряем зависимость
+            logic = ninjectKernel.Get<Logic>();
 
             TableYouTubers.SelectionChanged += TableYouTubers_SelectionChanged;
             btnAdd.Click += btnAdd_Click;

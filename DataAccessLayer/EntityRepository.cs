@@ -5,10 +5,9 @@ using ModelBloger;
 namespace DataAccessLayer
 {
     /// <summary>
-    /// Репозиторий на Entity Framework.
+    /// Репозиторий для работы с сущностью "Блогер" через Entity Framework.
     /// </summary>
-    /// <typeparam name="T">Тип сущности.</typeparam>
-    public class EntityRepository<T> : IRepository<T> where T : class, IDomainObject, new()
+    public class EntityRepository : IRepository<Blogger>
     {
         private readonly DataContext context;
 
@@ -22,58 +21,62 @@ namespace DataAccessLayer
         }
 
         /// <summary>
-        /// Добавляет объект в БД.
+        /// Добавляет блогера в БД.
         /// </summary>
-        /// <param name="obj">Объект для добавления.</param>
+        /// <param name="obj">Блогер для добавления.</param>
         /// <returns>Ничего не возвращает.</returns>
-        public void Create(T obj)
+        public void Create(Blogger obj)
         {
-            context.Set<T>().Add(obj);
+            context.Bloggers.Add(obj);
             context.SaveChanges();
         }
 
         /// <summary>
-        /// Возвращает все объекты из БД.
+        /// Возвращает всех блогеров из БД.
         /// </summary>
-        /// <returns>Список объектов.</returns>
-        public IEnumerable<T> ReadAll()
+        /// <returns>Список блогеров.</returns>
+        public IEnumerable<Blogger> ReadAll()
         {
-            return context.Set<T>().ToList();
+            return context.Bloggers.ToList();
         }
 
         /// <summary>
-        /// Возвращает объект по ID.
+        /// Возвращает блогера по ID.
         /// </summary>
-        /// <param name="id">ID объекта.</param>
-        /// <returns>Объект или null.</returns>
-        public T ReadById(int id)
+        /// <param name="id">ID блогера.</param>
+        /// <returns>Блогер или null.</returns>
+        public Blogger ReadById(int id)
         {
-            return context.Set<T>().FirstOrDefault(x => x.Id == id);
+            return context.Bloggers.FirstOrDefault(x => x.Id == id);
         }
 
         /// <summary>
-        /// Обновляет объект в БД.
+        /// Обновляет данные блогера в БД.
         /// </summary>
-        /// <param name="obj">Обновлённый объект.</param>
+        /// <param name="obj">Обновлённый блогер.</param>
         /// <returns>Ничего не возвращает.</returns>
-        public void Update(T obj)
+        public void Update(Blogger obj)
         {
-            T origin = context.Set<T>().FirstOrDefault(x => x.Id == obj.Id);
+            Blogger origin = context.Bloggers.FirstOrDefault(x => x.Id == obj.Id);
             if (origin != null)
             {
-                context.Entry(origin).CurrentValues.SetValues(obj);
+                origin.Name = obj.Name;
+                origin.Subscribers = obj.Subscribers;
+                origin.Platform = obj.Platform;
+                origin.Topic = obj.Topic;
+
                 context.SaveChanges();
             }
         }
 
         /// <summary>
-        /// Удаляет объект из БД.
+        /// Удаляет блогера из БД.
         /// </summary>
-        /// <param name="obj">Удаляемый объект.</param>
+        /// <param name="obj">Удаляемый блогер.</param>
         /// <returns>Ничего не возвращает.</returns>
-        public void Delete(T obj)
+        public void Delete(Blogger obj)
         {
-            context.Set<T>().Remove(obj);
+            context.Bloggers.Remove(obj);
             context.SaveChanges();
         }
     }

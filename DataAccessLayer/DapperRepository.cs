@@ -7,85 +7,80 @@ using ModelBloger;
 namespace DataAccessLayer
 {
     /// <summary>
-    /// Репозиторий на Dapper. Работает через SQL-запросы.
+    /// Репозиторий для работы с сущностью "Блогер" через Dapper.
     /// </summary>
-    /// <typeparam name="T">Тип сущности.</typeparam>
-    public class DapperRepository<T> : IRepository<T> where T : IDomainObject, new()
+    public class DapperRepository : IRepository<Blogger>
     {
         private readonly string connectionString;
-        private readonly string tableName;
 
         /// <summary>
         /// Конструктор репозитория Dapper.
         /// </summary>
         /// <param name="connectionString">Строка подключения к БД.</param>
-        /// <param name="tableName">Имя таблицы (например, "Bloggers").</param>
         /// <returns>Ничего не возвращает.</returns>
-        public DapperRepository(string connectionString, string tableName)
+        public DapperRepository(string connectionString)
         {
             this.connectionString = connectionString;
-            this.tableName = tableName;
         }
 
         /// <summary>
-        /// Добавляет запись в БД.
+        /// Добавляет блогера в БД.
         /// </summary>
-        /// <param name="obj">Объект для добавления.</param>
+        /// <param name="obj">Блогер для добавления.</param>
         /// <returns>Ничего не возвращает.</returns>
-        public void Create(T obj)
+        public void Create(Blogger obj)
         {
             using var db = new SqlConnection(connectionString);
-            // ИСПРАВЛЕНО: добавлен Id и @Id
-            string sql = $"INSERT INTO {tableName} (Id, Name, Subscribers, Platform, Topic) " +
+            string sql = "INSERT INTO Bloggers (Id, Name, Subscribers, Platform, Topic) " +
                          "VALUES (@Id, @Name, @Subscribers, @Platform, @Topic)";
             db.Execute(sql, obj);
         }
 
         /// <summary>
-        /// Возвращает все записи из БД.
+        /// Возвращает всех блогеров из БД.
         /// </summary>
-        /// <returns>Список объектов.</returns>
-        public IEnumerable<T> ReadAll()
+        /// <returns>Список блогеров.</returns>
+        public IEnumerable<Blogger> ReadAll()
         {
             using var db = new SqlConnection(connectionString);
-            string sql = $"SELECT * FROM {tableName}";
-            return db.Query<T>(sql).ToList();
+            string sql = "SELECT * FROM Bloggers";
+            return db.Query<Blogger>(sql).ToList();
         }
 
         /// <summary>
-        /// Возвращает запись по ID.
+        /// Возвращает блогера по ID.
         /// </summary>
-        /// <param name="id">ID записи.</param>
-        /// <returns>Объект или null.</returns>
-        public T ReadById(int id)
+        /// <param name="id">ID блогера.</param>
+        /// <returns>Блогер или null.</returns>
+        public Blogger ReadById(int id)
         {
             using var db = new SqlConnection(connectionString);
-            string sql = $"SELECT * FROM {tableName} WHERE Id = @id";
-            return db.QueryFirstOrDefault<T>(sql, new { id });
+            string sql = "SELECT * FROM Bloggers WHERE Id = @id";
+            return db.QueryFirstOrDefault<Blogger>(sql, new { id });
         }
 
         /// <summary>
-        /// Обновляет запись в БД.
+        /// Обновляет данные блогера в БД.
         /// </summary>
-        /// <param name="obj">Обновлённый объект.</param>
+        /// <param name="obj">Обновлённый блогер.</param>
         /// <returns>Ничего не возвращает.</returns>
-        public void Update(T obj)
+        public void Update(Blogger obj)
         {
             using var db = new SqlConnection(connectionString);
-            string sql = $"UPDATE {tableName} SET Name = @Name, Subscribers = @Subscribers, " +
+            string sql = "UPDATE Bloggers SET Name = @Name, Subscribers = @Subscribers, " +
                          "Platform = @Platform, Topic = @Topic WHERE Id = @Id";
             db.Execute(sql, obj);
         }
 
         /// <summary>
-        /// Удаляет запись из БД.
+        /// Удаляет блогера из БД.
         /// </summary>
-        /// <param name="obj">Удаляемый объект.</param>
+        /// <param name="obj">Удаляемый блогер.</param>
         /// <returns>Ничего не возвращает.</returns>
-        public void Delete(T obj)
+        public void Delete(Blogger obj)
         {
             using var db = new SqlConnection(connectionString);
-            string sql = $"DELETE FROM {tableName} WHERE Id = @Id";
+            string sql = "DELETE FROM Bloggers WHERE Id = @Id";
             db.Execute(sql, obj);
         }
     }
