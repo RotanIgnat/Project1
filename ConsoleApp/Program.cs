@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using ModelBloger;
+﻿using BusinessLogic;
 using DataAccessLayer;
-using BusinessLogic;
+using ModelBloger;
+using Ninject;
+using System;
+using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
 
 namespace ConsoleApp
 {
     internal class Program
     {
-        private static Logic _logic = new Logic(new EntityRepository<Blogger>());
-        ///private static Logic _logic = new Logic(new DapperRepository<Blogger>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString, "Bloggers"));
+        // Контейнер 
+        private static IKernel ninjectKernel = new StandardKernel(new SimpleConfigModule());
+
+        // Получаем Logic через контейнер
+        private static Logic _logic = ninjectKernel.Get<Logic>();
 
 
         /// <summary>

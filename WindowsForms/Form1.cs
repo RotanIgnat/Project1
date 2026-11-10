@@ -1,6 +1,7 @@
-﻿using ModelBloger;
+﻿using BusinessLogic;
 using DataAccessLayer;
-using BusinessLogic;
+using ModelBloger;
+using Ninject;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,8 +11,10 @@ namespace WindowsForms
 {
     public partial class Form1 : Form
     {
-        private readonly Logic logic = new Logic(new EntityRepository<Blogger>());
-        /*private static Logic _logic = new Logic(new DapperRepository<Blogger>(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString,"Bloggers"));*/
+        // контейнер
+        private IKernel ninjectKernel = new StandardKernel(new SimpleConfigModule());
+        // Получаем Logic через контейнер
+        private readonly Logic logic;
 
         /// <summary>
         /// Конструктор формы: подписка на события и первичная загрузка данных.
