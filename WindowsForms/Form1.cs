@@ -14,9 +14,7 @@ namespace WindowsForms
     {
         //контейнер
         private IKernel ninjectKernel = new StandardKernel(new SimpleConfigModule());
-
-        // Логика создастся через контейнер в конструкторе
-        private readonly Logic logic;
+        private readonly ILogic logic;
 
         /// <summary>   
         /// Конструктор формы: подписка на события и первичная загрузка данных.

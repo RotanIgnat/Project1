@@ -1,31 +1,25 @@
 ﻿using Ninject.Modules;
 using DataAccessLayer;
 using ModelBloger;
-using System.Configuration;
 
 namespace BusinessLogic
 {
     /// <summary>
-    /// Модуль конфигурации для DI-контейнера Ninject.
-    /// Устанавливает соответствия между интерфейсами и их реализациями.
+    /// Модуль конфигурации DI.
     /// </summary>
     public class SimpleConfigModule : NinjectModule
     {
-        /// <summary>
-        /// Загружает правила внедрения зависимостей.
-        /// </summary>
-        /// <returns>Ничего не возвращает.</returns>
         public override void Load()
         {
-            //Entity Framework
+            // Репозиторий (Singleton)
             Bind<IRepository<Blogger>>().To<EntityRepository>().InSingletonScope();
 
-            /* daper
-             Bind<IRepository<Blogger>>()
-                 .To<DapperRepository>()
-                 .WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString)
-                 .InSingletonScope();
-            */
+            // Сервисы
+            Bind<IBloggerService>().To<BloggerService>();
+            Bind<ISortFilterService>().To<SortFilterService>();
+
+            // Логика
+            Bind<ILogic>().To<Logic>();
         }
     }
 }

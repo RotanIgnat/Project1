@@ -10,9 +10,9 @@ namespace ConsoleApp
 {
     internal class Program
     {
-        // Внедряем DI-контейнер Ninject
+        // DI-контейнер Ninject
         private static IKernel ninjectKernel = new StandardKernel(new SimpleConfigModule());
-        private static Logic _logic = ninjectKernel.Get<Logic>();
+        private static ILogic _logic = ninjectKernel.Get<ILogic>();
 
         /// <summary>
         /// Точка входа, главное меню программы.
