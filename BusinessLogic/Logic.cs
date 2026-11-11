@@ -196,7 +196,6 @@ namespace BusinessLogic
         /// Возвращает сумму подписчиков всех блогеров указанной платформы.
         /// </summary>
         /// <param name="platform">Название платформы.</param>
-        /// <returns>Суммарное число подписчиков.</returns>
         public long GetSubscribersByPlatform(string platform)
         {
             return repository.ReadAll()

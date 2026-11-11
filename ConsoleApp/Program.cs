@@ -4,14 +4,13 @@ using System.Linq;
 using ModelBloger;
 using DataAccessLayer;
 using BusinessLogic;
-using System.Configuration;
-using Ninject; // ДОБАВЛЕНО: для DI-контейнера
+using Ninject; // Для DI
 
 namespace ConsoleApp
 {
     internal class Program
     {
-        // ИЗМЕНЕНО: используем контейнер вместо new
+        // Внедряем DI-контейнер Ninject
         private static IKernel ninjectKernel = new StandardKernel(new SimpleConfigModule());
         private static Logic _logic = ninjectKernel.Get<Logic>();
 
